@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button';
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import { getTokenFromLocalStorage, isUserLoggedIn } from "../utility/utils.js";
 
 function Login() {
 
@@ -11,19 +12,27 @@ function Login() {
 
     const [token, setToken] = useState("");
     const [loading, setLoading] = useState(true);
+    const [loginError, setLoginError]=useState("");
+    // Testing warning handle
+    const handleSetToken = (newToken: string) => setToken({
+      ...token,
+      token: newToken,
+    });
 
     useEffect(() => {
+
         const checkAlreadyLoggedIn = async () =>{
             setLoading(true);
             try {
-                const {data: response} = localStorage.getItem("token");
-                if (response && response.length > 1) {
-                    console.log("Nasao stari token: " + JSON.stringify(response));
-                    setToken(response);
-                    setAuthToken(token);
+                isUserLoggedIn()
+                  .then((result) => {
+                  if (result === true) {
+                    const localToken = getTokenFromLocalStorage();
+                    handleSetToken(localToken);
+                    setAuthTokenHeader(localToken);
                     redirectToUserPage();
-
-                }
+                  }
+                });
             } catch (error) {
                 console.error(error.message);
             }
@@ -33,10 +42,10 @@ function Login() {
     })
 
     function redirectToUserPage() {
-        navigate("/User");
+        navigate("/users");
     }
 
-    function setAuthToken(token)  {
+    function setAuthTokenHeader(token)  {
         if (token.length > 1) {
             axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         }
@@ -72,11 +81,17 @@ function Login() {
                 setToken(token);
 
                 //set token to axios common header
-                setAuthToken(token);
+                setAuthTokenHeader(token);
+
+                setLoginError("");
 
                 redirectToUserPage();
             })
-            .catch(err => console.log(err));
+            .catch((err) => {
+                console.log(err);
+                setLoginError("Wrong username or password.");
+                }
+             );
     }
 
 
@@ -88,14 +103,23 @@ function Login() {
                 <Form.Group className="mb-3" controlId="formBasicUsername">
                     <Form.Label>Username</Form.Label>
                     <Form.Control name="username" type="text" placeholder="Enter username" />
+                    {loginError &&
+                    <Form.Text className="text-muted">
+                                            {loginError}
+                                        </Form.Text>}
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
                     <Form.Control name="password" type="password" placeholder="Password" />
+                    {loginError &&
+                    <Form.Text className="text-muted">
+                                            {loginError}
+                    </Form.Text>}
+                    {!loginError &&
                     <Form.Text className="text-muted">
                         Tip: Never share your password with anyone else.
-                    </Form.Text>
+                    </Form.Text>}
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
                     <Form.Check type="checkbox" label="Remember me" />

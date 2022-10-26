@@ -1,11 +1,23 @@
 import React, {useEffect, useState} from 'react';
 import UserService from '../../service/UserService';
+import axios from 'axios';
+import { getTokenFromLocalStorage, isUserLoggedIn } from "../utility/utils.js";
 
-function User() {
+function Users() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [token, setToken] = useState("");
+    const [loggedIn, setLoggedIn] = useState(true);
 
     useEffect(() => {
+        const setAuthTokenHeader = async(token) =>{
+            if (token.length > 1) {
+                axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+            }
+            else
+                delete axios.defaults.headers.common["Authorization"];
+        }
+
         const fetchData = async () =>{
             setLoading(true);
             try {
@@ -17,7 +29,17 @@ function User() {
             setLoading(false);
         }
 
-        fetchData();
+        getTokenFromLocalStorage().then((token) => {
+            if (token && token.length > 1) {
+                setLoggedIn(true);
+                setAuthTokenHeader(token);
+                fetchData();
+                setLoading(false);
+            } else {
+                setLoggedIn(false);
+                setLoading(false);
+            }
+        });
     }, []);
         return (
             <div>
@@ -51,11 +73,12 @@ function User() {
                         </tbody>
                     </table>
                     )}
+                {!loggedIn && <div>Please log in to see content!</div>}
 
             </div>
 
         )
 }
 
-export default User;
+export default Users;
 

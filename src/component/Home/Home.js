@@ -12,7 +12,7 @@ function Home() {
     }
 
     return  (
-            <div style={{"text-align": "center"}}>
+            <div style={{"textAlign": "center"}}>
                 <h1 className = "text-center">Welcome to webshop front end!</h1>
                 <Button variant="primary" onClick={redirectToLogin}>Log In</Button>{' '}
             </div>
