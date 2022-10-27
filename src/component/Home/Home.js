@@ -1,20 +1,15 @@
 import React from "react";
-import Button from 'react-bootstrap/Button';
-import { useNavigate } from 'react-router-dom';
-
+import { useAuthContext } from "../../hooks/useAuthContext"
 
 function Home() {
-
-    let navigate = useNavigate();
-
-    function redirectToLogin() {
-        navigate("/Login");
-    }
+    const { user } = useAuthContext();
 
     return  (
             <div style={{"textAlign": "center"}}>
-                <h1 className = "text-center">Welcome to webshop front end!</h1>
-                <Button variant="primary" onClick={redirectToLogin}>Log In</Button>{' '}
+                <h1 className = "text-center">Welcome to home page!</h1>
+                          {user && (
+                              <span>You are logged in as {user.username}.</span>
+                          )}
             </div>
     )
 

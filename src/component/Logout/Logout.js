@@ -3,13 +3,14 @@ import {useNavigate} from "react-router-dom";
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import { useState } from "react";
-import { isUserLoggedIn, resetLocalStorageToken } from "../utility/utils.js";
+import { useLogout } from '../../hooks/useLogout'
 
 function Logout() {
 
     let navigate = useNavigate();
 
     const [token, setToken] = useState("");
+    const { logout } = useLogout()
 
     function resetAuthTokenHeader()  {
         delete axios.defaults.headers.common["Authorization"];
@@ -19,19 +20,9 @@ function Logout() {
         navigate("/Login");
     }
 
-    function resetStoreToken() {
-        setToken("");
-    }
-
-    function resetToken() {
-        resetLocalStorageToken().then(() => {
-            resetStoreToken();
-            resetAuthTokenHeader();
-        });
-    }
-
     function onLogoutClick() {
-        resetToken();
+        resetAuthTokenHeader();
+        logout();
         redirectToLogin();
     }
 
