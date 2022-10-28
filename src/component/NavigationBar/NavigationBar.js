@@ -14,6 +14,7 @@ function NavigationBar() {
                 <Nav className="me-auto">
                 {user && <Nav.Link href="/">Home</Nav.Link>}
                 {user && <Nav.Link href="users">Users</Nav.Link>}
+                {user && <Nav.Link href="products">Products</Nav.Link>}
                 </Nav>
                 <Nav>
                 {user && <Nav.Link>Welcome, {user.username} !</Nav.Link>}

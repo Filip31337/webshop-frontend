@@ -6,6 +6,7 @@ import Logout from './component/Logout/Logout';
 import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import NotFound from "./component/NotFound/NotFound";
 import NavigationBar from "./component/NavigationBar/NavigationBar";
+import Products from "./component/Products/Products";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
               <Route  path="/login" element={<Login />}/>
               <Route  path="/users" element={<Users />}/>
               <Route  path="/logout" element={<Logout />}/>
+              <Route  path="/products" element={<Products />}/>
               <Route  path="*" element={<NotFound />}/>
           </Routes>
       </Router>

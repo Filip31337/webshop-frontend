@@ -11,8 +11,8 @@ function Login() {
 
     const {login, error, isLoading } = useLogin();
 
-    function redirectToUserPage() {
-        navigate("/users");
+    function redirectToHomePage() {
+        navigate("/");
     }
 
     function setAuthTokenHeader(token)  {
@@ -31,7 +31,7 @@ function Login() {
 
         await login(username, password);
 
-        redirectToUserPage();
+        redirectToHomePage();
 
     }
 
