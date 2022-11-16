@@ -1,15 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../../hooks/useLogin";
 import axios from 'axios';
+import {useAuthContext} from "../../hooks/useAuthContext";
 
 function Login() {
 
     let navigate = useNavigate();
 
     const {login, error, isLoading } = useLogin();
+    const { user } = useAuthContext();
 
     function redirectToHomePage() {
         navigate("/");
@@ -30,10 +32,15 @@ function Login() {
         const { username, password } = document.forms[0];
 
         await login(username, password);
-
-        redirectToHomePage();
-
     }
+
+    useEffect(() =>{
+       if (user){
+           if (!error) {
+               redirectToHomePage();
+           };
+       }
+    });
 
 
         return (
