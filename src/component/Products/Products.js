@@ -48,7 +48,7 @@ function Products() {
         <div>
             <h1 className = "text-center">Products</h1>
             {loading && <div>Loading</div>}
-            {!loading && (
+            {!loading && user && (
                 <table className = "table table-striped">
                     <thead>
                     <tr>

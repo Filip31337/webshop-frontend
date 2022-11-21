@@ -4,6 +4,7 @@ import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import { useState } from "react";
 import { useLogout } from '../../hooks/useLogout'
+import { resetLocalStorageToken} from "../utility/utils";
 
 function Logout() {
 
@@ -12,7 +13,7 @@ function Logout() {
     const [token, setToken] = useState("");
     const { logout } = useLogout()
 
-    function resetAuthTokenHeader()  {
+    async function resetAuthTokenHeader()  {
         delete axios.defaults.headers.common["Authorization"];
     }
 
@@ -21,8 +22,9 @@ function Logout() {
     }
 
     function onLogoutClick() {
-        resetAuthTokenHeader();
-        logout();
+        resetAuthTokenHeader()
+            .then(() => resetLocalStorageToken())
+            .then(() => logout());
         redirectToLogin();
     }
 
