@@ -8,14 +8,10 @@ export const useLogin = () => {
     const { dispatch } = useAuthContext();
 
     const login = async (username, password) => {
-        const jwtRequest = {
-            username: username.value,
-            password: password.value
-        }
-
-        console.log("saljem login request: " + JSON.stringify(jwtRequest));
-
-        axios.post("http://localhost:8080/webshop/authenticate", jwtRequest)
+        axios.post("http://localhost:8080/webshop/authenticate", {}, {auth: {
+                username: username.value,
+                password: password.value
+            }})
             .then(response => {
                 console.log("dobio login response: " + JSON.stringify(response));
                 //get data from response
